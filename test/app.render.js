@@ -91,6 +91,22 @@ describe('app', function(){
       })
     })
 
+    describe('when the extension maps to a module that is not a view engine', function(){
+      it('should provide a helpful error', function(done){
+        var app = createApp();
+
+        app.set('views', path.join(__dirname, 'fixtures'))
+        assert.throws(function () {
+          app.render('broken.send', function () {})
+        }, function (err) {
+          assert.ok(!(err instanceof TypeError), 'unexpected ' + err.message)
+          assert.equal(err.message, 'Module "send" does not provide a view engine.')
+          return true
+        })
+        done()
+      })
+    })
+
     describe('when an error occurs', function(){
       it('should invoke the callback', function(done){
         var app = createApp();
